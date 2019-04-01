@@ -1,3 +1,5 @@
+import Tooltip from "rc-tooltip"
+import "rc-tooltip/assets/bootstrap_white.css"
 import * as React from "react"
 import controllable from "react-controllables"
 import {
@@ -18,6 +20,7 @@ const rwidth = 40
 Object.assign(window, { twemoji })
 interface BracketGameProps {
 	game: Game
+	tooltip: React.Component
 
 	homeOnTop?: boolean
 	hoveredTeamId?: string | null
@@ -68,6 +71,7 @@ class BracketGame extends React.PureComponent<BracketGameProps> {
 	render() {
 		const {
 			game,
+			tooltip,
 
 			hoveredTeamId,
 			onHoveredTeamIdChange,
@@ -218,113 +222,119 @@ class BracketGame extends React.PureComponent<BracketGameProps> {
 				bottom && bottom.team && bottom.team.id === hoveredTeamId
 
 		return (
-			<svg
-				width={width}
-				height={globh}
-				viewBox={`0 0 ${width} ${globh}`}
-				{...rest}
-			>
-				{/* game time */}
-				{!notext && (
-					<text
-						x={width / 2}
-						y="8"
-						textAnchor="middle"
-						style={gameTimeStyle}
-					>
-						{topText!(game)}
-					</text>
-				)}
-
-				{/* backgrounds */}
-
-				{/* base background */}
-				<rect
-					x="0"
-					y={toph}
+			<Tooltip overlay={tooltip}>
+				<svg
 					width={width}
-					height={height * 2}
-					fill={backgroundColor}
-					rx="3"
-					ry="3"
-				/>
+					height={globh}
+					viewBox={`0 0 ${width} ${globh}`}
+					{...rest}
+				>
+					{/* game time */}
+					{!notext && (
+						<text
+							x={width / 2}
+							y="8"
+							textAnchor="middle"
+							style={gameTimeStyle}
+						>
+							{topText!(game)}
+						</text>
+					)}
 
-				{/* background for the top team */}
-				<rect
-					x="0"
-					y={toph}
-					width={width}
-					height={height}
-					fill={topHovered ? hoverBackgroundColor : backgroundColor}
-					rx="3"
-					ry="3"
-				/>
-				{/* background for the bottom team */}
-				<rect
-					x="0"
-					y={boty}
-					width={width}
-					height={height}
-					fill={
-						bottomHovered ? hoverBackgroundColor : backgroundColor
-					}
-					rx="3"
-					ry="3"
-				/>
+					{/* backgrounds */}
 
-				{/* scores background */}
-				<rect
-					x={width - rwidth}
-					y={toph}
-					width={rwidth}
-					height={height * 2}
-					fill={scoreBackground}
-					rx="3"
-					ry="3"
-				/>
-
-				{/* winner background */}
-				{winnerBackground}
-
-				{/* the players */}
-				{top ? (
-					<SideComponent
-						x={0}
+					{/* base background */}
+					<rect
+						x="0"
 						y={toph}
-						side={top}
-						onHover={onHoveredTeamIdChange}
+						width={width}
+						height={height * 2}
+						fill={backgroundColor}
+						rx="3"
+						ry="3"
 					/>
-				) : null}
 
-				{bottom ? (
-					<SideComponent
-						x={0}
+					{/* background for the top team */}
+					<rect
+						x="0"
+						y={toph}
+						width={width}
+						height={height}
+						fill={
+							topHovered ? hoverBackgroundColor : backgroundColor
+						}
+						rx="3"
+						ry="3"
+					/>
+					{/* background for the bottom team */}
+					<rect
+						x="0"
 						y={boty}
-						side={bottom}
-						onHover={onHoveredTeamIdChange}
+						width={width}
+						height={height}
+						fill={
+							bottomHovered
+								? hoverBackgroundColor
+								: backgroundColor
+						}
+						rx="3"
+						ry="3"
 					/>
-				) : null}
 
-				<line
-					x1="0"
-					y1={boty}
-					x2={width}
-					y2={boty}
-					style={teamSeparatorStyle}
-				/>
+					{/* scores background */}
+					<rect
+						x={width - rwidth}
+						y={toph}
+						width={rwidth}
+						height={height * 2}
+						fill={scoreBackground}
+						rx="3"
+						ry="3"
+					/>
 
-				{/* game name */}
-				{!notext && (
-					<text
-						x={width / 2}
-						y={boty + height + toph}
-						textAnchor="middle"
-						style={gameNameStyle}
-					>
-						{bottomText!(game)}
-					</text>
-				)}
-			</svg>
+					{/* winner background */}
+					{winnerBackground}
+
+					{/* the players */}
+					{top ? (
+						<SideComponent
+							x={0}
+							y={toph}
+							side={top}
+							onHover={onHoveredTeamIdChange}
+						/>
+					) : null}
+
+					{bottom ? (
+						<SideComponent
+							x={0}
+							y={boty}
+							side={bottom}
+							onHover={onHoveredTeamIdChange}
+						/>
+					) : null}
+
+					<line
+						x1="0"
+						y1={boty}
+						x2={width}
+						y2={boty}
+						style={teamSeparatorStyle}
+					/>
+
+					{/* game name */}
+					{!notext && (
+						<text
+							x={width / 2}
+							y={boty + height + toph}
+							textAnchor="middle"
+							style={gameNameStyle}
+						>
+							{bottomText!(game)}
+						</text>
+					)}
+				</svg>
+			</Tooltip>
 		)
 	}
 }

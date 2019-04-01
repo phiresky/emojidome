@@ -172,20 +172,6 @@ class UI extends React.Component {
 					<button onClick={e => this.startLevel--}>-</button>
 					<button onClick={e => this.startLevel++}>+</button>
 				</div>
-				{this.selectedGame && (
-					<span>
-						{" "}
-						Clicked on:{" "}
-						{this.selectedGame.sides.home.team
-							? this.selectedGame.sides.home.team.name
-							: "?"}
-						{" vs "}
-						{this.selectedGame.sides.visitor.team
-							? this.selectedGame.sides.visitor.team.name
-							: "?"}
-						{": "}"{this.selectedGame.name}"
-					</span>
-				)}
 				{(() => {
 					if (this.renderableData)
 						return (
@@ -195,7 +181,20 @@ class UI extends React.Component {
 								homeOnTop={true}
 								GameComponent={props => (
 									<BracketGame
-										onClick={() => this.click(props.game)}
+										tooltip={() => (
+											<span>
+												{props.game.sides.home.team
+													? props.game.sides.home.team
+															.name
+													: "?"}
+												{" vs "}
+												{props.game.sides.visitor.team
+													? props.game.sides.visitor
+															.team.name
+													: "?"}
+												{": "}"{props.game.name}"
+											</span>
+										)}
 										{...props}
 									/>
 								)}
