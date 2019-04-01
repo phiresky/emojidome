@@ -147,23 +147,58 @@ class UI extends React.Component {
 		console.log(game)
 		return game
 	}
+	click = (game: Game) => {
+		this.selectedGame = game
+	}
+	@observable selectedGame: Game | null = null
 	render() {
 		return (
 			<div>
-				<h1>Emojidome Live Bracket Viewer</h1>
+				<h1>
+					Emojidome Live Bracket Viewer{" "}
+					<small>
+						<small>
+							<small>
+								<a href="https://github.com/phiresky/emojidome">
+									Source on GitHub
+								</a>
+							</small>
+						</small>
+					</small>
+				</h1>
+
 				<div>
 					Hiding first {this.startLevel} levels{" "}
 					<button onClick={e => this.startLevel--}>-</button>
 					<button onClick={e => this.startLevel++}>+</button>
 				</div>
+				{this.selectedGame && (
+					<span>
+						{" "}
+						Clicked on:{" "}
+						{this.selectedGame.sides.home.team
+							? this.selectedGame.sides.home.team.name
+							: "?"}
+						{" vs "}
+						{this.selectedGame.sides.visitor.team
+							? this.selectedGame.sides.visitor.team.name
+							: "?"}
+						{": "}"{this.selectedGame.name}"
+					</span>
+				)}
 				{(() => {
 					if (this.renderableData)
 						return (
 							<Bracket
 								game={this.renderableData}
-								gameDimensions={{ width: 100, height: 84 }}
+								gameDimensions={{ width: 80, height: 84 }}
 								homeOnTop={true}
-								GameComponent={BracketGame}
+								GameComponent={props => (
+									<BracketGame
+										onClick={() => this.click(props.game)}
+										{...props}
+									/>
+								)}
 							/>
 						)
 					return <div>loading...</div>

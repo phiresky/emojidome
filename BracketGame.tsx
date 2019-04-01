@@ -13,7 +13,8 @@ const notext = true
 const height = 40
 const boty = toph + height
 const globh = boty + height + toph * 2 + 4
-const width = 70
+const width = 80
+const rwidth = 40
 Object.assign(window, { twemoji })
 interface BracketGameProps {
 	game: Game
@@ -43,8 +44,8 @@ class BracketGame extends React.PureComponent<BracketGameProps> {
 		hoveredTeamId: null,
 
 		styles: {
-			backgroundColor: "#fff",
-			hoverBackgroundColor: "#222",
+			backgroundColor: "#eee",
+			hoverBackgroundColor: "#eee",
 
 			scoreBackground: "#787a80",
 			winningScoreBackground: "#ff7324",
@@ -104,9 +105,9 @@ class BracketGame extends React.PureComponent<BracketGameProps> {
 			top.score.score !== bottom.score.score ? (
 				top.score.score > bottom.score.score ? (
 					<rect
-						x={width - 30}
+						x={width - rwidth}
 						y={toph}
-						width="30"
+						width={rwidth}
 						height={height}
 						style={{ fill: winningScoreBackground }}
 						rx="3"
@@ -114,9 +115,9 @@ class BracketGame extends React.PureComponent<BracketGameProps> {
 					/>
 				) : (
 					<rect
-						x={width - 30}
+						x={width - rwidth}
 						y={boty}
-						width="30"
+						width={rwidth}
 						height={height}
 						style={{ fill: winningScoreBackground }}
 						rx="3"
@@ -198,7 +199,7 @@ class BracketGame extends React.PureComponent<BracketGameProps> {
                             </RectClipped>*/}
 
 					<text
-						x={x + width - 15}
+						x={x + width - rwidth / 2}
 						y={y + height / 2}
 						height={height}
 						style={teamScoreStyle}
@@ -273,9 +274,9 @@ class BracketGame extends React.PureComponent<BracketGameProps> {
 
 				{/* scores background */}
 				<rect
-					x={width - 30}
+					x={width - rwidth}
 					y={toph}
-					width="30"
+					width={rwidth}
 					height={height * 2}
 					fill={scoreBackground}
 					rx="3"

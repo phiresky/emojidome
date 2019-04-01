@@ -1,4 +1,8 @@
 {
+	"scripts": {
+		"build": "yarn parcel build --public-url . index.html",
+		"dev": "yarn parcel index.html"
+	},
 	"dependencies": {
 		"@types/react": "^16.8.10",
 		"@types/react-dom": "^16.8.3",
