@@ -54,7 +54,7 @@ type BracketData = {
 
 @observer
 class UI extends React.Component {
-	@observable i = 0
+	@observable startLevel = 2
 	ws: WebSocket
 
 	@observable bracket: BracketData | null = null
@@ -76,21 +76,23 @@ class UI extends React.Component {
 	@computed
 	get renderableData(): Game | null {
 		if (this.bracket === null) return null
-		const maxLevel = 8
+		const startLevel = Math.max(0, Math.min(this.startLevel, 8))
+		const maxLevel = 8 - startLevel
 		const levels = this.bracket.played
 			.map(level => level.slice().reverse())
 			.reverse()
-
-		levels[levels.length - 1].push(
-			this.bracket.current,
-			...this.bracket.upcoming.map(([l, r]) => ({
-				extra: { commentary: [], end_time: "unknown" },
-				game: [
-					{ score: 0, competitor: l },
-					{ score: 0, competitor: r },
-				] as [Competitor, Competitor],
-			})),
-		)
+			.slice(startLevel)
+		if (levels.length > 0)
+			levels[levels.length - 1].push(
+				this.bracket.current,
+				...this.bracket.upcoming.map(([l, r]) => ({
+					extra: { commentary: [], end_time: "unknown" },
+					game: [
+						{ score: 0, competitor: l },
+						{ score: 0, competitor: r },
+					] as [Competitor, Competitor],
+				})),
+			)
 		for (const [i, level] of levels.entries()) {
 			if (level.length !== 2 ** (maxLevel - i))
 				console.log(
@@ -146,23 +148,29 @@ class UI extends React.Component {
 		return game
 	}
 	render() {
-		if (this.renderableData)
-			return (
-				<Bracket
-					game={this.renderableData}
-					gameDimensions={{ width: 100, height: 84 }}
-					homeOnTop={true}
-					GameComponent={BracketGame}
-				/>
-			)
-		return <div>loading...</div>
+		return (
+			<div>
+				<h1>Emojidome Live Bracket Viewer</h1>
+				<div>
+					Hiding first {this.startLevel} levels{" "}
+					<button onClick={e => this.startLevel--}>-</button>
+					<button onClick={e => this.startLevel++}>+</button>
+				</div>
+				{(() => {
+					if (this.renderableData)
+						return (
+							<Bracket
+								game={this.renderableData}
+								gameDimensions={{ width: 100, height: 84 }}
+								homeOnTop={true}
+								GameComponent={BracketGame}
+							/>
+						)
+					return <div>loading...</div>
+				})()}
+			</div>
+		)
 	}
 }
 
-render(
-	<div>
-		<h1>Emojidome Live Bracket</h1>
-		<UI />
-	</div>,
-	document.getElementById("root"),
-)
+render(<UI />, document.getElementById("root"))

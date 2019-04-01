@@ -149,7 +149,7 @@ class BracketGame extends React.PureComponent<BracketGameProps> {
 					url = options.base + options.size + `/${icon}.png`
 				},
 			})
-			console.log(emoji, url)
+			//console.log(emoji, url)
 			return (
 				<g
 					onMouseEnter={() =>
