@@ -1,3 +1,5 @@
+// 99% copied from react-tournament-bracket/lib/components
+
 import Tooltip from "rc-tooltip"
 import "rc-tooltip/assets/bootstrap_white.css"
 import * as React from "react"
