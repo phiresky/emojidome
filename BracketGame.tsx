@@ -17,8 +17,15 @@ const notext = true
 const height = 40
 const boty = toph + height
 const globh = boty + height + toph * 2 + 4
-const width = 80
-const rwidth = 40
+const width = 85
+const rwidth = 45
+
+export function numberToString(x: number) {
+	const THINSPACE = "\u202f"
+	const thousandSep = Math.abs(x) >= 10000 ? THINSPACE : ""
+	return x.toLocaleString("en-US").replace(/,/g, thousandSep)
+}
+
 Object.assign(window, { twemoji })
 interface BracketGameProps {
 	game: Game
@@ -223,7 +230,9 @@ class BracketGame extends React.PureComponent<BracketGameProps> {
 						textAnchor="middle"
 					>
 						<tspan alignmentBaseline="middle">
-							{side.score ? side.score.score : null}
+							{side.score
+								? numberToString(side.score.score)
+								: null}
 						</tspan>
 					</text>
 				</g>

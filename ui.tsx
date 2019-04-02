@@ -212,7 +212,7 @@ class UI extends React.Component {
 				{this.renderableData ? (
 					<Bracket
 						game={this.renderableData}
-						gameDimensions={{ width: 80, height: 84 }}
+						gameDimensions={{ width: 85, height: 84 }}
 						homeOnTop={true}
 						GameComponent={GameComponent}
 					/>
