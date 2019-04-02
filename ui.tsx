@@ -10,10 +10,7 @@ import BracketGame from "./BracketGame"
 type Events =
 	| {
 			event: "score"
-			scores: [
-				{ score: 3861; competitor: "🦜" },
-				{ score: 11295; competitor: "🐢" }
-			]
+			scores: [Competitor, Competitor]
 	  }
 	| { event: "start"; bracket: BracketData }
 
@@ -27,10 +24,7 @@ type BracketData = {
 			]
 			end_time: "2019-04-01T19:44:20.70275514Z"
 		}
-		game: [
-			{ score: 3289; competitor: "🦜" },
-			{ score: 9717; competitor: "🐢" }
-		]
+		game: [Competitor, Competitor]
 	}
 	played: [
 		[
@@ -55,6 +49,7 @@ type BracketData = {
 @observer
 class UI extends React.Component {
 	@observable startLevel = 2
+	@observable frequentUpdates = false
 	ws: WebSocket
 
 	@observable bracket: BracketData | null = null
@@ -70,6 +65,12 @@ class UI extends React.Component {
 		console.log(data.event)
 		if (data.event === "start") {
 			this.bracket = data.bracket
+		} else if (
+			data.event === "score" &&
+			this.frequentUpdates === true &&
+			this.bracket !== null
+		) {
+			this.bracket.current.game = data.scores
 		}
 	}
 
@@ -171,6 +172,17 @@ class UI extends React.Component {
 					Hiding first {this.startLevel} levels{" "}
 					<button onClick={e => this.startLevel--}>-</button>
 					<button onClick={e => this.startLevel++}>+</button>
+				</div>
+				<div>
+					<label>
+						More frequent updates
+						<input
+							type="checkbox"
+							onChange={e =>
+								(this.frequentUpdates = e.target.checked)
+							}
+						/>
+					</label>
 				</div>
 				{(() => {
 					if (this.renderableData)
