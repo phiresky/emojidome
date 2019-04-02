@@ -3,6 +3,7 @@ import { observer } from "mobx-react"
 import * as React from "react"
 import { render } from "react-dom"
 import { Bracket } from "react-tournament-bracket"
+import { GameComponentProps } from "react-tournament-bracket/lib/components/Bracket"
 import { Game, SideInfo } from "react-tournament-bracket/lib/components/model"
 import BracketGame from "./BracketGame"
 
@@ -47,6 +48,25 @@ type BracketData = {
 }
 
 const totalMaxLevel = 8
+function GameComponent(props: GameComponentProps) {
+	return (
+		<BracketGame
+			tooltip={() => (
+				<span>
+					{props.game.sides.home.team
+						? props.game.sides.home.team.name
+						: "?"}
+					{" vs "}
+					{props.game.sides.visitor.team
+						? props.game.sides.visitor.team.name
+						: "?"}
+					{": "}"{props.game.name}"
+				</span>
+			)}
+			{...props}
+		/>
+	)
+}
 @observer
 class UI extends React.Component {
 	@observable startLevel = 2
@@ -189,36 +209,16 @@ class UI extends React.Component {
 						/>
 					</label>
 				</div>
-				{(() => {
-					if (this.renderableData)
-						return (
-							<Bracket
-								game={this.renderableData}
-								gameDimensions={{ width: 80, height: 84 }}
-								homeOnTop={true}
-								GameComponent={props => (
-									<BracketGame
-										tooltip={() => (
-											<span>
-												{props.game.sides.home.team
-													? props.game.sides.home.team
-															.name
-													: "?"}
-												{" vs "}
-												{props.game.sides.visitor.team
-													? props.game.sides.visitor
-															.team.name
-													: "?"}
-												{": "}"{props.game.name}"
-											</span>
-										)}
-										{...props}
-									/>
-								)}
-							/>
-						)
-					return <div>loading...</div>
-				})()}
+				{this.renderableData ? (
+					<Bracket
+						game={this.renderableData}
+						gameDimensions={{ width: 80, height: 84 }}
+						homeOnTop={true}
+						GameComponent={GameComponent}
+					/>
+				) : (
+					<div>loading...</div>
+				)}
 			</div>
 		)
 	}
