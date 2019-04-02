@@ -6,7 +6,7 @@ import { Bracket } from "react-tournament-bracket"
 import { GameComponentProps } from "react-tournament-bracket/lib/components/Bracket"
 import { Game, SideInfo } from "react-tournament-bracket/lib/components/model"
 import BracketGame from "./BracketGame"
-
+// copy of the final data from the websocket
 // examples
 type Events =
 	| {
@@ -71,15 +71,16 @@ function GameComponent(props: GameComponentProps) {
 class UI extends React.Component {
 	@observable startLevel = 2
 	@observable frequentUpdates = false
-	ws: WebSocket
+	// ws: WebSocket
 
 	@observable bracket: BracketData | null = null
 	constructor(props: {}) {
 		super(props)
 		Object.assign(window, { ui: this })
 		console.log("made")
-		this.ws = new WebSocket("wss://emojidome.xkcd.com/2131/socket")
-		this.ws.addEventListener("message", this.onMessage)
+		// this.ws = new WebSocket("wss://emojidome.xkcd.com/2131/socket")
+		// this.ws.addEventListener("message", this.onMessage)
+		import("./final.json").then(data => (this.bracket = data.bracket))
 	}
 	onMessage = (message: MessageEvent) => {
 		const data: Events = JSON.parse(message.data)
