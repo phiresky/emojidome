@@ -99,9 +99,20 @@ class BracketGame extends React.PureComponent<BracketGameProps> {
 		} = this.props
 
 		const { sides } = game
+		const tid = (t: { id: string } | undefined) => (t ? t.id : NaN)
 
-		const top = sides[homeOnTop ? Side.HOME : Side.VISITOR]
-		const bottom = sides[homeOnTop ? Side.VISITOR : Side.HOME]
+		const homeTopEmoji =
+			sides.home.seed && sides.home.seed.sourceGame
+				? [
+						sides.home.seed.sourceGame.sides.home.team,
+						sides.home.seed.sourceGame.sides.visitor.team,
+				  ]
+						.map(tid)
+						.indexOf(tid(sides.home.team)) >= 0
+				: true
+
+		const top = sides[homeTopEmoji ? Side.HOME : Side.VISITOR]
+		const bottom = sides[homeTopEmoji ? Side.VISITOR : Side.HOME]
 
 		const winnerBackground =
 			top &&
