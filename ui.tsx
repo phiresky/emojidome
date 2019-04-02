@@ -67,6 +67,8 @@ function GameComponent(props: GameComponentProps) {
 		/>
 	)
 }
+
+const done = true
 @observer
 class UI extends React.Component {
 	@observable startLevel = 2
@@ -77,10 +79,12 @@ class UI extends React.Component {
 	constructor(props: {}) {
 		super(props)
 		Object.assign(window, { ui: this })
-		console.log("made")
-		// this.ws = new WebSocket("wss://emojidome.xkcd.com/2131/socket")
-		// this.ws.addEventListener("message", this.onMessage)
-		import("./final.json").then(data => (this.bracket = data.bracket))
+		if (done)
+			import("./final.json").then(data => (this.bracket = data.bracket))
+		else {
+			const ws = new WebSocket("wss://emojidome.xkcd.com/2131/socket")
+			ws.addEventListener("message", this.onMessage)
+		}
 	}
 	onMessage = (message: MessageEvent) => {
 		const data: Events = JSON.parse(message.data)
@@ -199,17 +203,19 @@ class UI extends React.Component {
 						<button onClick={e => this.startLevel++}>+</button>
 					)}
 				</div>
-				<div>
-					<label>
-						More frequent updates
-						<input
-							type="checkbox"
-							onChange={e =>
-								(this.frequentUpdates = e.target.checked)
-							}
-						/>
-					</label>
-				</div>
+				{!done && (
+					<div>
+						<label>
+							More frequent updates
+							<input
+								type="checkbox"
+								onChange={e =>
+									(this.frequentUpdates = e.target.checked)
+								}
+							/>
+						</label>
+					</div>
+				)}
 				{this.renderableData ? (
 					<Bracket
 						game={this.renderableData}
