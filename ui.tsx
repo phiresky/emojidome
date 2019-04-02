@@ -46,6 +46,7 @@ type BracketData = {
 	]
 }
 
+const totalMaxLevel = 8
 @observer
 class UI extends React.Component {
 	@observable startLevel = 2
@@ -77,8 +78,8 @@ class UI extends React.Component {
 	@computed
 	get renderableData(): Game | null {
 		if (this.bracket === null) return null
-		const startLevel = Math.max(0, Math.min(this.startLevel, 8))
-		const maxLevel = 8 - startLevel
+		const startLevel = this.startLevel
+		const maxLevel = totalMaxLevel - startLevel
 		const levels = this.bracket.played
 			.map(level => level.slice().reverse())
 			.reverse()
@@ -170,8 +171,12 @@ class UI extends React.Component {
 
 				<div>
 					Hiding first {this.startLevel} level(s){" "}
-					<button onClick={e => this.startLevel--}>-</button>
-					<button onClick={e => this.startLevel++}>+</button>
+					{this.startLevel > 0 && (
+						<button onClick={e => this.startLevel--}>-</button>
+					)}
+					{this.startLevel < totalMaxLevel && (
+						<button onClick={e => this.startLevel++}>+</button>
+					)}
 				</div>
 				<div>
 					<label>
