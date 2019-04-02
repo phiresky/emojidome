@@ -5,14 +5,18 @@ Reference:
 https://xkcd.com/2131/
 https://explainxkcd.com/2131/
 
-## Open a live dev server
+## Development
+
+The main ui object is exposed in dev console as window.ui
+
+### Open a live dev server
 
 ```bash
 yarn install
 yarn dev
 ```
 
-## Build production version
+### Build production version
 
 ```bash
 yarn build
