@@ -1,7 +1,8 @@
 {
 	"scripts": {
 		"build": "yarn parcel build --public-url . index.html",
-		"dev": "yarn parcel index.html"
+		"dev": "yarn parcel index.html",
+		"pages": "rm -r dist/*; yarn build; cd dist; git add -A .; git commit -m'update binaries'"
 	},
 	"dependencies": {
 		"@types/react": "^16.8.10",
