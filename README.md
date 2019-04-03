@@ -5,6 +5,10 @@ Reference:
 https://xkcd.com/2131/
 https://explainxkcd.com/2131/
 
+## Full Bracket
+
+![full-bracket.png](full-bracket.png)
+
 ## Development
 
 The main ui object is exposed in dev console as window.ui
